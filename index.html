@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#030b18">
+<title>JARVIS — Kişisel Yapay Zekâ</title>
+<link rel="icon" type="image/svg+xml" href="jarvis-icon.svg">
+<style>
+:root{--bg:#020712;--panel:#061326;--panel2:#081a33;--blue:#087cff;--cyan:#18d8ff;--text:#e6f2ff;--muted:#7f9cbd;--line:#0b3970}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(ellipse at 50% 25%,#071b39 0%,var(--bg) 55%,#01040a 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input{font:inherit}button{cursor:pointer;color:inherit}
+.app{min-height:100dvh;display:grid;grid-template-columns:86px 1fr;grid-template-rows:86px minmax(450px,1fr);max-width:1600px;margin:auto}
+header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:14px 26px;border-bottom:1px solid #0a2140;background:#030b18cc;backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:14px}.logo{width:56px;height:56px;filter:drop-shadow(0 0 14px #007bff88)}.brandname{font-size:29px;letter-spacing:5px;font-weight:300}.tagline{color:#17baff;font-size:13px;margin-top:1px}
+.header-right{display:flex;align-items:center;gap:10px}.user-chip,.round-btn{border:1px solid #102b4d;background:#061326;border-radius:999px;padding:10px 15px;color:#cde6ff}.round-btn{width:44px;height:44px;padding:0;font-size:20px}
+nav{grid-row:2;border-right:1px solid #0a2140;display:flex;flex-direction:column;align-items:center;gap:13px;padding:22px 7px}
+.navitem{width:70px;min-height:72px;border:1px solid transparent;background:transparent;border-radius:18px;color:#a6bdd9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:12px}
+.navitem .glyph{font-size:23px}.navitem.active{background:linear-gradient(135deg,#0b3670,#071a34);border-color:#0d4b91;color:#fff;box-shadow:inset 0 0 22px #087cff18}
+main{min-width:0;display:grid;grid-template-columns:minmax(0,1fr) 250px;grid-template-rows:minmax(500px,1fr) 340px;gap:18px;padding:22px 26px 24px}
+.orb-area{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px;position:relative}
+.orb-wrap{width:min(39vw,390px);aspect-ratio:1;position:relative;display:grid;place-items:center;margin-top:-8px}
+.orb-wrap:before,.orb-wrap:after{content:"";position:absolute;border-radius:50%;inset:0;border:1px solid #087cff28}
+.orb-wrap:after{inset:7%;border:1px solid #087cff44;box-shadow:0 0 35px #087cff12,inset 0 0 35px #087cff0c}
+.orb-core{width:70%;height:70%;border-radius:50%;background:radial-gradient(circle at 40% 35%,#0b397b 0%,#061a3b 48%,#020b1c 78%);border:1px solid #0b6cf0;box-shadow:0 0 50px #006bff26,inset 0 0 35px #087cff22;display:grid;place-items:center;z-index:1}
+.orb-rings{width:62%;height:62%;filter:drop-shadow(0 0 10px #0a83ff);animation:float 5s ease-in-out infinite}
+.ring{fill:none;stroke:url(#ringGrad);stroke-width:5.5;stroke-linecap:round}
+.orbit{position:absolute;inset:4%;border-radius:50%;border:2px solid transparent;border-top-color:#098cff;border-right-color:#086bce;transform:rotate(-30deg);filter:drop-shadow(0 0 5px #078cff);animation:spin 9s linear infinite}
+.orbit.two{inset:-3%;border-width:1px;border-top-color:#13d7ff;border-left-color:#0759bd;transform:rotate(110deg);animation-duration:14s;animation-direction:reverse}
+.orbit.three{inset:12%;border-width:3px;border-bottom-color:#0c68da;border-left-color:#13c9ff;transform:rotate(25deg);animation-duration:6s}
+.status{font-size:22px;font-weight:600;color:#23b9ff;margin-top:16px}.substatus{color:#178ce8;margin-top:5px;text-align:center;font-size:14px}
+.controls{display:flex;align-items:center;gap:16px;margin-top:22px}.control{width:54px;height:54px;border-radius:50%;border:1px solid #102f54;background:#07172c;color:#9abde5;font-size:21px;display:grid;place-items:center}.control.primary{width:64px;height:64px;background:radial-gradient(circle,#0b4f9c,#06234b);border:2px solid #0aaaff;color:#72e9ff;box-shadow:0 0 24px #008cff66}.control.on{color:#4bdfff;border-color:#0b9cff}.control.stop{color:#ff596d;background:#1d1020;border-color:#51203b}
+.sidecard{align-self:center;border:1px solid #0756a0;border-radius:20px;padding:22px 20px;background:linear-gradient(155deg,#06182d,#020914);box-shadow:0 0 35px #006cff0b}
+.sidecard h2{font-size:21px;color:#26aaff;margin:0 0 3px}.sidecard p{margin:0 0 18px;color:#a8c6e8;font-size:14px}.feature{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #10233a;color:#b6cee9;font-size:13px}.feature:last-child{border-bottom:0}.featureicon{width:32px;height:32px;border:1px solid #104579;border-radius:50%;display:grid;place-items:center;color:#5dbbff;font-size:16px}
+.chat{grid-column:1/-1;border:1px solid #07509b;border-radius:20px;background:linear-gradient(150deg,#041123ed,#020914f5);display:flex;flex-direction:column;min-height:0;overflow:hidden;box-shadow:0 0 32px #006cff0a}
+.messages{flex:1;overflow:auto;padding:22px 24px 14px;display:flex;flex-direction:column;gap:18px}
+.message{display:flex;align-items:flex-start;gap:12px;max-width:85%}.message.user{align-self:flex-end;flex-direction:row-reverse}.avatar{flex:0 0 44px;width:44px;height:44px;border-radius:50%;border:1px solid #087cff;background:#041a36;display:grid;place-items:center;color:#22baff}
+.bubble{padding:13px 16px;border:1px solid #123f75;border-radius:17px;background:#081c38;color:#d5e7ff;line-height:1.55;font-size:14px}.user .bubble{background:linear-gradient(135deg,#0755d9,#087bfa);border-color:#147eff;color:white;border-top-right-radius:6px}.assistant .bubble{border-top-left-radius:6px}.time{font-size:11px;color:#6697c9;margin:5px 4px 0}
+.composer{border-top:1px solid #0b2e56;padding:13px 16px;display:flex;gap:12px;align-items:center}.input-wrap{border:1px solid #0757a8;border-radius:999px;display:flex;align-items:center;gap:10px;flex:1;min-width:0;padding:0 15px;height:52px;background:#020b18}.input-wrap input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:white}.input-wrap input::placeholder{color:#7188a7}.send{width:52px;height:52px;border-radius:50%;border:0;background:#0868ee;color:white;font-size:20px;box-shadow:0 0 20px #087cff30}
+@keyframes spin{to{transform:rotate(330deg)}}@keyframes float{50%{transform:scale(1.04)}}
+.listening .orbit{animation-duration:2.5s}.listening .orb-rings{animation-duration:1.5s}.speaking .orb-core{box-shadow:0 0 70px #0aaaff60,inset 0 0 50px #0aaaff55}
+@media(max-width:900px){.app{grid-template-columns:66px 1fr;grid-template-rows:74px auto}header{padding:10px 15px}.logo{width:45px;height:45px}.brandname{font-size:23px;letter-spacing:3px}.tagline{font-size:11px}nav{padding:16px 4px}.navitem{width:56px;min-height:64px;font-size:11px}main{grid-template-columns:1fr;grid-template-rows:minmax(410px,auto) auto 330px;padding:14px;gap:14px}.orb-wrap{width:min(66vw,330px)}.sidecard{display:none}.chat{grid-column:1;min-height:300px}.message{max-width:95%}.messages{padding:16px 12px}.avatar{width:35px;height:35px;flex-basis:35px}.bubble{font-size:13px;padding:10px 12px}.user-chip{font-size:12px;padding:9px 10px}.header-right{gap:6px}.round-btn{width:38px;height:38px}}
+@media(max-width:480px){.app{grid-template-columns:1fr;grid-template-rows:66px 1fr}header{grid-column:1;padding:8px 12px}.logo{width:40px;height:40px}.brand{gap:8px}.brandname{font-size:21px}.tagline{font-size:10px}.user-chip{display:none}nav{grid-row:auto;border-right:0;border-bottom:1px solid #0a2140;flex-direction:row;justify-content:center;padding:7px 6px;gap:5px}.navitem{width:25%;min-height:49px;border-radius:12px;gap:1px}.navitem .glyph{font-size:19px}main{padding:8px;grid-template-rows:minmax(360px,52vh) 320px;gap:10px}.orb-area{min-height:360px}.orb-wrap{width:min(75vw,290px)}.status{font-size:20px;margin-top:10px}.substatus{font-size:12px}.controls{gap:11px;margin-top:15px}.control{width:46px;height:46px}.control.primary{width:56px;height:56px}.chat{border-radius:15px}.messages{gap:12px;padding:12px 8px}.message{gap:7px;max-width:98%}.avatar{width:30px;height:30px;flex-basis:30px;font-size:13px}.bubble{font-size:12px;padding:9px 10px}.composer{padding:9px;gap:8px}.input-wrap{height:46px;padding:0 11px}.send{width:46px;height:46px}.time{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">
+    <svg class="logo" viewBox="0 0 100 100" aria-label="JARVIS logo"><defs><radialGradient id="bgG"><stop stop-color="#0a4d9d"/><stop offset="1" stop-color="#020b1c"/></radialGradient><linearGradient id="lg"><stop stop-color="#11e2ff"/><stop offset="1" stop-color="#1675ff"/></linearGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bgG)" stroke="#063d80"/><circle cx="39" cy="50" r="22" fill="none" stroke="url(#lg)" stroke-width="5"/><circle cx="61" cy="50" r="22" fill="none" stroke="url(#lg)" stroke-width="5"/></svg>
+    <div><div class="brandname">JARVIS</div><div class="tagline">Her zaman seninle...</div></div>
+  </div>
+  <div class="header-right"><div class="user-chip">◉ &nbsp; Merhaba, Tunç Kara　⌄</div><button class="round-btn" title="Ayarlar" onclick="alert('Ayarlar bölümü sonraki geliştirme adımında bağlanacak.')">⚙</button><button class="round-btn" title="Güç" onclick="setStatus('Beklemede')">⏻</button></div>
+</header>
+<nav>
+  <button class="navitem active" onclick="setTab(this,'Ses')"><span class="glyph">♩</span>Ses</button>
+  <button class="navitem" onclick="setTab(this,'Yazı')"><span class="glyph">▤</span>Yazı</button>
+  <button class="navitem" onclick="setTab(this,'Ayarlar')"><span class="glyph">⚙</span>Ayarlar</button>
+  <button class="navitem" onclick="setTab(this,'Hakkında')"><span class="glyph">ⓘ</span>Hakkında</button>
+</nav>
+<main>
+  <section class="orb-area" id="orbArea">
+    <div class="orb-wrap" aria-label="JARVIS animasyonlu halka logosu"><div class="orbit"></div><div class="orbit two"></div><div class="orbit three"></div><div class="orb-core">
+      <svg class="orb-rings" viewBox="0 0 200 150" aria-hidden="true"><defs><linearGradient id="ringGrad"><stop stop-color="#13e4ff"/><stop offset=".5" stop-color="#167bff"/><stop offset="1" stop-color="#a1f6ff"/></linearGradient></defs><ellipse class="ring" cx="78" cy="75" rx="47" ry="52"/><ellipse class="ring" cx="122" cy="75" rx="47" ry="52"/></svg>
+    </div></div>
+    <div class="status" id="status">Hazırım, efendim.</div><div class="substatus" id="substatus">Konuşmaya başlamak için mikrofonu açın.</div>
+    <div class="controls"><button class="control primary" id="micBtn" title="Mikrofonu aç/kapat" onclick="toggleMic()">🎙</button><button class="control" id="muteBtn" title="Dinlemeyi kapat" onclick="toggleMute()">♩̸</button><button class="control" id="soundBtn" title="Sesi aç/kapat" onclick="toggleSound()">🔊</button><button class="control stop" title="Durdur" onclick="setStatus('Beklemede')">■</button></div>
+  </section>
+  <aside class="sidecard"><h2>JARVIS</h2><p>Kişisel Yapay Zekâ Asistanın</p><div class="feature"><span class="featureicon">♙</span>Soru sor</div><div class="feature"><span class="featureicon">◉</span>Bilgi al</div><div class="feature"><span class="featureicon">☑</span>Plan yap</div><div class="feature"><span class="featureicon">▦</span>Hesapla</div><div class="feature"><span class="featureicon">ⓘ</span>Yardım iste</div><div class="feature"><span class="featureicon">∞</span>Ve daha fazlası...</div></aside>
+  <section class="chat">
+    <div class="messages" id="messages">
+      <div class="message user"><div class="avatar">♟</div><div><div class="bubble">Merhaba JARVIS, nasılsın?</div><div class="time">14:32</div></div></div>
+      <div class="message assistant"><div class="avatar">◎</div><div><div class="bubble">Merhaba efendim! 😊<br>Ben hazırım. Size nasıl yardımcı olabilirim?</div><div class="time">14:32</div></div></div>
+      <div class="message user"><div class="avatar">♟</div><div><div class="bubble">Bugünkü planımı yapabilir misin?</div><div class="time">14:33</div></div></div>
+      <div class="message assistant"><div class="avatar">◎</div><div><div class="bubble">Elbette efendim. Bugün için birlikte bir plan hazırlayabiliriz. Öncelikle, bugün mutlaka tamamlamak istediğiniz bir şey var mı?</div><div class="time">14:33</div></div></div>
+    </div>
+    <form class="composer" id="chatForm"><div class="input-wrap"><span style="color:#8ebbe9">⌁</span><input id="messageInput" autocomplete="off" placeholder="Mesajını yaz..." aria-label="Mesajını yaz"></div><button class="send" aria-label="Mesaj gönder">➤</button></form>
+  </section>
+</main>
+</div>
+<script>
+let micOn=false, muted=false, soundOn=true;
+function setStatus(s){document.getElementById('status').textContent=s}
+function toggleMic(){micOn=!micOn;document.getElementById('micBtn').classList.toggle('on',micOn);document.getElementById('orbArea').classList.toggle('listening',micOn&&!muted);setStatus(micOn&&!muted?'Dinliyorum...':'Hazırım, efendim.');document.getElementById('substatus').textContent=micOn&&!muted?'Konuşabilirsiniz, efendim.':'Konuşmaya başlamak için mikrofonu açın.'}
+function toggleMute(){muted=!muted;document.getElementById('muteBtn').classList.toggle('on',muted);document.getElementById('orbArea').classList.toggle('listening',micOn&&!muted);setStatus(muted?'Mikrofon sessizde.':(micOn?'Dinliyorum...':'Hazırım, efendim.'))}
+function toggleSound(){soundOn=!soundOn;document.getElementById('soundBtn').classList.toggle('on',soundOn);if(soundOn&&'speechSynthesis'in window){let u=new SpeechSynthesisUtterance('Evet efendim, nasıl yardımcı olabilirim?');u.lang='tr-TR';speechSynthesis.speak(u)}}
+function setTab(btn,name){document.querySelectorAll('.navitem').forEach(x=>x.classList.remove('active'));btn.classList.add('active');if(name==='Ses'){document.getElementById('messageInput').placeholder='Mesajını yaz...'}else if(name==='Yazı'){document.getElementById('messageInput').focus()}else{setStatus(name+' bölümü');document.getElementById('substatus').textContent='Bu bölüm sonraki geliştirme adımında bağlanacak.'}}
+document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefault();let input=document.getElementById('messageInput'),v=input.value.trim();if(!v)return;addMessage(v,'user');input.value='';setTimeout(()=>addMessage('Mesajınızı aldım, efendim. Gerçek yapay zekâ bağlantısı eklendiğinde burada yanıt vereceğim.','assistant'),350)});
+function addMessage(text,role){let row=document.createElement('div');row.className='message '+role;let av=document.createElement('div');av.className='avatar';av.textContent=role==='user'?'♟':'◎';let wrap=document.createElement('div'),bubble=document.createElement('div');bubble.className='bubble';bubble.textContent=text;let time=document.createElement('div');time.className='time';time.textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});wrap.append(bubble,time);row.append(av,wrap);document.getElementById('messages').append(row);row.scrollIntoView({behavior:'smooth',block:'end'})}
+</script>
+</body>
+</html>
